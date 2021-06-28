@@ -7,7 +7,7 @@ import { typeDefs, resolvers } from './graphql';
 const start = async () => {
   const db = await connectDb();
   const server = new ApolloServer({
-    cors:true,
+    cors: false,
     resolvers,
     typeDefs,
     context: ({ req, res }) => ({ db, req, res }),
