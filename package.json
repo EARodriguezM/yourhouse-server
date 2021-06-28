@@ -1,11 +1,11 @@
 {
   "name": "server",
-  "version": "0.0.5",
+  "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon src/index.ts",
-    "start": "nodemon src/index.ts",
+    "start": "node build/index.js",
     "build": "tsc -p ./",
     "seed": "ts-node temp/seed.ts"
   },
