@@ -1,6 +1,7 @@
 //require('dotenv').config();
 
 import { ApolloServer } from 'apollo-server';
+import { seed } from './temp/seed';
 import { connectDb } from './database';
 import { typeDefs, resolvers } from './graphql';
 
@@ -37,6 +38,7 @@ const start = async () => {
   server
     .listen({ port: process.env.PORT || 5000 })
     .then(({ url }) => console.log(`Server ready at ${url}. `));
+  seed();
 };
 
 start();
