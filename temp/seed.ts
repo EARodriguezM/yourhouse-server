@@ -1,8 +1,8 @@
 //require('dotenv').config();
 
 import { ObjectId } from 'mongodb';
-import { connectDb } from '../database';
-import { ListingType, Listing, User, TransactionType } from '../types';
+import { connectDb } from '../src/database';
+import { ListingType, Listing, User, TransactionType } from '../src/types';
 import faker from 'faker';
 
 const randomNumbers = (min: number, max: number) => {
@@ -847,7 +847,7 @@ const users: User[] = [
   },
 ];
 
-export const seed = async () => {
+const seed = async () => {
   try {
     const db = await connectDb();
     for (const listing of listings) {
