@@ -16,17 +16,20 @@ const start = async () => {
     cors: {
       credentials: true,
       origin: (origin, callback) => {
-          const whitelist = [
-              "https://yourhouses.netlify.app",
-              "https://yourhouses.herokuapp.com/",
-              "https://studio.apollographql.com/"
-          ];
+          // const whitelist = [
+          //     "https://yourhouses.netlify.app",
+          //     "https://yourhouses.herokuapp.com/",
+          //     "https://studio.apollographql.com/"
+          // ];
 
-          if (whitelist.indexOf(origin!) !== -1) {
-              callback(null, true)
-          } else {
-              callback(new Error("Not allowed by CORS"))
-          }
+          // if (whitelist.indexOf(origin!) !== -1) {
+          //     callback(null, true)
+          // } else {
+          //     callback(new Error("Not allowed by CORS"))
+          // }
+
+          // Allow any origin
+          callback(null, true)
       }
   },
     resolvers,
