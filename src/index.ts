@@ -18,7 +18,8 @@ const start = async () => {
       origin: (origin, callback) => {
           const whitelist = [
               "https://yourhouses.netlify.app",
-              "https://yourhouses.herokuapp.com/"
+              "https://yourhouses.herokuapp.com/",
+              "https://studio.apollographql.com/"
           ];
 
           if (whitelist.indexOf(origin!) !== -1) {
