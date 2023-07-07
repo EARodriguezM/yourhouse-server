@@ -1,7 +1,7 @@
 import { Database } from '../../../types';
 import { Request } from 'express';
 import { ToggleFavoriteArgs } from './types';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import { authenticate } from '../../../lib/utils';
 
 export const favoritesResolvers = {
@@ -13,7 +13,7 @@ export const favoritesResolvers = {
     ) => {
       const user = await authenticate(db, req);
       if (!user) throw new Error('Ops make sure you login first');
-      const listing = await db.listings.findOne({ _id: new ObjectID(id) });
+      const listing = await db.listings.findOne({ _id: new ObjectId(id) });
 
       if (!listing) throw new Error(`Listing not found`);
 
@@ -32,11 +32,11 @@ export const favoritesResolvers = {
       } else {
         // add listing to user's favorites array
         const insertFaveResult = await db.favorites.insertOne({
-          _id: new ObjectID(),
+          _id: new ObjectId(),
           listingId: listing._id.toString(),
           userId: user._id,
         });
-        if (!insertFaveResult.result.ok)
+        if (!insertFaveResult.acknowledged)
           throw new Error('Failed to add to favorites');
       }
       return listing;

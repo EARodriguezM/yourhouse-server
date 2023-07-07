@@ -8,7 +8,7 @@ import {
 } from './types';
 import { authenticate } from '../../../lib/utils';
 import { Request } from 'express';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 
 export const userResolvers = {
   Query: {
@@ -22,7 +22,7 @@ export const userResolvers = {
         if (!host) throw new Error('Host not found');
         return host;
       } catch (error) {
-        throw new Error(error);
+        throw new Error(error as string);
       }
     },
   },
@@ -72,7 +72,7 @@ export const userResolvers = {
       }
 
       const listingsId = favorites.map(
-        (favorite) => new ObjectID(favorite.listingId)
+        (favorite) => new ObjectId(favorite.listingId)
       );
 
       let listings = db.listings

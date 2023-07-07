@@ -11,7 +11,7 @@ import {
   ChangePasswordArgs,
   ResetPasswordArgs,
 } from './types';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import { authenticate } from '../../../lib/utils';
 import { sendEmail } from '../../../lib/api/email';
 import { Google } from '../../../lib/api';
@@ -62,7 +62,8 @@ export const viewerResolvers = {
           token,
         };
       } catch (error) {
-        throw new AuthenticationError(error);
+        const b: string = error as string;
+        throw new AuthenticationError(b);
       }
     },
     loginWithGoogle: async (
@@ -79,11 +80,12 @@ export const viewerResolvers = {
       const googleId = results.sub;
       const photoUrl = results.picture;
 
-      let viewer = await db.users.findOne({ email });
+      let viewer = await db.users.findOne({ email }) as User;
+      let id = '';
 
       if (!viewer) {
         const insertResult = await db.users.insertOne({
-          _id: new ObjectID().toString(),
+          _id: new ObjectId().toString(),
           name,
           email,
           listings: [],
@@ -92,11 +94,11 @@ export const viewerResolvers = {
           photoUrl,
         });
 
-        viewer = insertResult.ops[0];
+        id = insertResult.insertedId;
       }
 
       // generate token
-      const token = generateToken(viewer._id, '7d');
+      const token = generateToken(id, '7d');
 
       return {
         user: viewer,
@@ -123,24 +125,24 @@ export const viewerResolvers = {
         email,
         password: encryptPassword,
         listings: [],
-        _id: new ObjectID().toString(),
+        _id: new ObjectId().toString(),
         isEmailVerified: false,
       });
 
-      const viewer = insertRes.ops[0];
+      const id = insertRes.insertedId;
 
       // generate access token
-      const token = generateToken(viewer._id, '7d');
+      const token = generateToken(id, '7d');
 
-      const emailVerifyToken = generateToken(viewer._id, '7d');
+      const emailVerifyToken = generateToken(id, '7d');
 
       const url = `${process.env.CLIENT_URL}/email-confirmation/${emailVerifyToken}`;
 
       try {
         await sendEmail({
-          name: viewer.name,
+          name: name,
           from: `${process.env.FROM_NAME} <${process.env.FROM_EMAIL}>`,
-          to: viewer.email,
+          to: email,
           template: 'email-confirmation',
           subject: 'Welcome to Property Listings',
           url,
@@ -151,7 +153,7 @@ export const viewerResolvers = {
       }
 
       return {
-        user: viewer,
+        user: await db.users.findOne({ email }) as User,
         token,
       };
     },
@@ -174,11 +176,11 @@ export const viewerResolvers = {
           },
         },
         {
-          returnOriginal: false,
+          includeResultMetadata: false,
         }
       );
 
-      const viewer = updateResult.value;
+      const viewer = updateResult;
 
       if (!viewer) throw new Error(`Error in updating profile details.`);
 
@@ -220,11 +222,11 @@ export const viewerResolvers = {
           },
         },
         {
-          returnOriginal: false,
+          includeResultMetadata: false,
         }
       );
 
-      const viewer = updateResult.value;
+      const viewer = updateResult;
 
       if (!viewer)
         throw new Error(
@@ -256,11 +258,11 @@ export const viewerResolvers = {
           },
         },
         {
-          returnOriginal: false,
+          includeResultMetadata: false,
         }
       );
 
-      const viewer = updateResult.value;
+      const viewer = updateResult;
 
       if (!viewer) throw new Error(`Error in validating email address.`);
 
@@ -302,7 +304,7 @@ export const viewerResolvers = {
         );
       } else {
         await db.passwordResets.insertOne({
-          _id: new ObjectID().toString(),
+          _id: new ObjectId().toString(),
           email,
           token: resetPasswordToken,
           expiredAt,
@@ -363,11 +365,11 @@ export const viewerResolvers = {
           },
         },
         {
-          returnOriginal: false,
+          includeResultMetadata: false,
         }
       );
 
-      const viewer = updateRes.value;
+      const viewer = updateRes;
 
       if (!viewer)
         throw new Error(

@@ -1,4 +1,4 @@
-//require('dotenv').config();
+// require('dotenv').config();
 
 import { ApolloServer } from 'apollo-server';
 import { connectDb } from './database';
@@ -35,7 +35,6 @@ const start = async () => {
     resolvers,
     typeDefs,
     context: ({ req, res }) => ({ db, req, res }),
-    playground: true,
     introspection: true,
   });
 

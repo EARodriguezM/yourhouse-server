@@ -100,7 +100,7 @@ export const listingResolvers = {
 
         return data;
       } catch (error) {
-        throw new Error(error);
+        throw new Error(error as string);
       }
     },
     listing: async (
@@ -145,6 +145,7 @@ export const listingResolvers = {
       if (!city || !admin || !country) throw new Error('Invalid input address');
 
       const imageUrl = await Cloudinary.upload(image);
+      let idToUse= new ObjectId;
 
       const insertResult = await db.listings.insertOne({
         transactionType,
@@ -163,9 +164,30 @@ export const listingResolvers = {
         city,
         host: viewer._id,
         verified: false,
+        _id:idToUse
       });
 
-      const listing: Listing = insertResult.ops[0];
+
+      const listing: Listing = {
+        transactionType,
+        title,
+        description,
+        imageUrl,
+        price,
+        type,
+        numOfGuests,
+        propertySize,
+        numOfBedrooms,
+        numOfBaths,
+        address,
+        country,
+        admin,
+        city,
+        host: viewer._id,
+        verified: false,
+        _id: insertResult.insertedId
+      };
+      
       return listing;
     },
     emailAgentListing: async (
@@ -199,7 +221,7 @@ export const listingResolvers = {
 
         return listing;
       } catch (error) {
-        throw new Error(error);
+        throw new Error(error as string);
       }
     },
   },
