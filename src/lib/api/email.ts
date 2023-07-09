@@ -65,7 +65,8 @@ export const sendEmail = async ({
     from,
     to,
     subject,
-    text: htmlToText.htmlToText(html),
+    // @ts-ignore
+    text: htmlToText.fromString(html),
     html,
   };
 
