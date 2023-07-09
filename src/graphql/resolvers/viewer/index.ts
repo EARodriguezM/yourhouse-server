@@ -144,7 +144,7 @@ export const viewerResolvers = {
           from: `${process.env.FROM_NAME} <${process.env.FROM_EMAIL}>`,
           to: email,
           template: 'email-confirmation',
-          subject: 'Welcome to Property Listings',
+          subject: 'Welcome to YourHouse',
           url,
           message: 'Thanks for creating an account',
         });
