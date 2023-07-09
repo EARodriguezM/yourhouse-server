@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer';
 import pug from 'pug';
-import htmlToText from 'html-to-text';
+import { htmlToText } from 'html-to-text';
 
 interface IEmail {
   name: string;
@@ -65,8 +65,7 @@ export const sendEmail = async ({
     from,
     to,
     subject,
-    // @ts-ignore
-    text: htmlToText.fromString(html),
+    text: htmlToText(html),
     html,
   };
 
